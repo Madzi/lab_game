@@ -1,10 +1,7 @@
-package com.e2.games.tools.sound;
+package ru.madzi.lab.util.sound;
 
-import com.e2.games.tools.graphics.Sprite;
+import ru.madzi.lab.util.graphics.Sprite;
 
-/**
- * @author Dmitry Eliseev (deliseev@madzi.ru)
- */
 public class Filter3d extends SoundFilter {
 
     private static final  int NUM_SHIFTING_SAMPLES = 500;

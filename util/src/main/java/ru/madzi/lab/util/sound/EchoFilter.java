@@ -1,4 +1,4 @@
-package com.e2.games.tools.sound;
+package ru.madzi.lab.util.sound;
 
 /**
  * @author Dmitry Eliseev (deliseev@madzi.ru)
