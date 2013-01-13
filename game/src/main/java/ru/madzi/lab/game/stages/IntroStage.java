@@ -7,6 +7,12 @@ import ru.madzi.lab.util.stages.Stage;
 
 public class IntroStage implements Stage {
 
+    private static final long INTRO_TIME = 5000;
+
+    private long showTime;
+
+    private boolean done;
+
     /**
      * {@inheritDoc}
      */
@@ -18,42 +24,43 @@ public class IntroStage implements Stage {
      * {@inheritDoc}
      */
     public String checkForStageChange() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return done ? "_exit" : null;
     }
 
     /**
      * {@inheritDoc}
      */
     public void loadResources(ResourceManager resourceManager) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
      * {@inheritDoc}
      */
     public void start(InputManager inputManager) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        showTime = 0;
+        done = false;
     }
 
     /**
      * {@inheritDoc}
      */
     public void stop() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
      * {@inheritDoc}
      */
     public void update(long elapsedTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        showTime += elapsedTime;
+        if (showTime > INTRO_TIME) {
+            done = true;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void draw(Graphics2D g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

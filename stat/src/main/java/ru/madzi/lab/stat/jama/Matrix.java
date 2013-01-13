@@ -1,6 +1,7 @@
 package ru.madzi.lab.stat.jama;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StreamTokenizer;
@@ -8,32 +9,52 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Vector;
 
 /**
- * Работа с матрицами.
+ * Матрица.
  */
 public class Matrix implements Cloneable, Serializable {
 
     private double[][] A;
 
-    private int m, n;
+    private int m;
 
+    private int n;
+
+    /**
+     * Создание матрицы.
+     *
+     * @param m количество строк
+     * @param n количество столбцов
+     */
     public Matrix(int m, int n) {
-       this.m = m;
-       this.n = n;
-       A = new double[m][n];
+        this.m = m;
+        this.n = n;
+        A = new double[m][n];
     }
 
+    /**
+     * Создание матрицы.
+     *
+     * @param m количество строк
+     * @param n количество столбцов
+     * @param s скаляр, инициализирующий все ячейки
+     */
     public Matrix(int m, int n, double s) {
-       this(m, n);
-       A = new double[m][n];
-       for (int i = 0; i < m; ++i) {
-           for (int j = 0; j < n; ++j) {
-               A[i][j] = s;
-           }
-       }
+        this(m, n);
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                A[i][j] = s;
+            }
+        }
     }
 
+    /**
+     * Создание матрицы.
+     *
+     * @param A двумерный массив
+     */
     public Matrix(double[][] A) {
         m = A.length;
         n = A[0].length;
@@ -45,13 +66,26 @@ public class Matrix implements Cloneable, Serializable {
         this.A = A;
     }
 
+    /**
+     * Создание матрицы.
+     *
+     * @param A двумерный массив
+     * @param m количество строк
+     * @param n количество столбцов
+     */
     public Matrix(double[][] A, int m, int n) {
         this.A = A;
         this.m = m;
         this.n = n;
     }
 
-    public Matrix(double vals[], int m) {
+    /**
+     * Создание матрицы.
+     *
+     * @param vals одномерный массив
+     * @param m количество строк
+     */
+    public Matrix(double[] vals, int m) {
         this.m = m;
         n = (m != 0 ? vals.length / m : 0);
         if (m * n != vals.length) {
@@ -65,6 +99,12 @@ public class Matrix implements Cloneable, Serializable {
         }
     }
 
+    /**
+     * Создани матрицы на основе массива.
+     *
+     * @param A двумерный массив
+     * @return матрица
+     */
     public static Matrix constructWithCopy(double[][] A) {
         int m = A.length;
         int n = A[0].length;
@@ -81,6 +121,11 @@ public class Matrix implements Cloneable, Serializable {
         return X;
     }
 
+    /**
+     * Создание полной копии матрицы.
+     *
+     * @return копия матрицы
+     */
     public Matrix copy() {
         Matrix X = new Matrix(m, n);
         double[][] C = X.getArray();
@@ -92,15 +137,28 @@ public class Matrix implements Cloneable, Serializable {
         return X;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object clone() {
         return this.copy();
     }
 
+    /**
+     * Возвращает массив матрицы.
+     *
+     * @return двумерный массив матрицы
+     */
     public double[][] getArray() {
         return A;
     }
 
+    /**
+     * Возвращает массив на основе матрицы.
+     *
+     * @return двумерный массив
+     */
     public double[][] getArrayCopy() {
         double[][] C = new double[m][n];
         for (int i = 0; i < m; ++i) {
@@ -111,6 +169,11 @@ public class Matrix implements Cloneable, Serializable {
         return C;
     }
 
+    /**
+     * Возвращает одномерный массив на основе матрицы.
+     *
+     * @return одномерный массив
+     */
     public double[] getColumnPackedCopy() {
         double[] vals = new double[m * n];
         for (int i = 0; i < m; ++i) {
@@ -121,6 +184,11 @@ public class Matrix implements Cloneable, Serializable {
         return vals;
     }
 
+    /**
+     * Возвращает одномерный массив на основе матрицы.
+     *
+     * @return одномерный массив
+     */
     public double[] getRowPackedCopy() {
         double[] vals = new double[m * n];
         for (int i = 0; i < m; ++i) {
@@ -131,33 +199,66 @@ public class Matrix implements Cloneable, Serializable {
         return vals;
     }
 
+    /**
+     * Возвращает размерность матрицы в строках.
+     *
+     * @return число строк
+     */
     public int getRowDimension() {
         return m;
     }
 
+    /**
+     * Возвращает размерность матрицы в столбцах.
+     *
+     * @return число столбцов
+     */
     public int getColumnDimension() {
         return n;
     }
 
+    /**
+     * Возвращает элемент матрицы.
+     *
+     * @param i строка
+     * @param j столбец
+     * @return значение в указанной ячейке
+     */
     public double get(int i, int j) {
         return A[i][j];
     }
 
+    /**
+     * Возвращает матрицу на основе подматрицы.
+     *
+     * @param i0 начальная строка
+     * @param i1 конечная строка
+     * @param j0 начальная колонка
+     * @param j1 конечная колонка
+     * @return подматрица
+     */
     public Matrix getMatrix(int i0, int i1, int j0, int j1) {
         Matrix X = new Matrix(i1 - i0 + 1, j1 - j0 + 1);
         double[][] B = X.getArray();
         try {
             for (int i = i0; i <= i1; ++i) {
                 for (int j = j0; j <= j1; ++j) {
-                    B[i-i0][j-j0] = A[i][j];
+                    B[i - i0][j - j0] = A[i][j];
                 }
             }
-        } catch(ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException("Submatrix indices");
         }
         return X;
     }
 
+    /**
+     * Возвращает матрицу на основе  подматрицы исходной матрицы.
+     *
+     * @param r массив с номерами строк
+     * @param c массив с номерами столбцов
+     * @return подматрица
+     */
     public Matrix getMatrix(int[] r, int[] c) {
         Matrix X = new Matrix(r.length, c.length);
         double[][] B = X.getArray();
@@ -167,7 +268,7 @@ public class Matrix implements Cloneable, Serializable {
                     B[i][j] = A[r[i]][c[j]];
                 }
             }
-        } catch(ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             throw new ArrayIndexOutOfBoundsException("Submatrix indices");
         }
         return X;
@@ -273,7 +374,7 @@ public class Matrix implements Cloneable, Serializable {
             for (int i = 0; i < m; ++i) {
                 s += Math.abs(A[i][j]);
             }
-            f = Math.max(f,s);
+            f = Math.max(f, s);
         }
         return f;
     }
@@ -289,7 +390,7 @@ public class Matrix implements Cloneable, Serializable {
             for (int j = 0; j < n; ++j) {
                 s += Math.abs(A[i][j]);
             }
-            f = Math.max(f,s);
+            f = Math.max(f, s);
         }
         return f;
     }
@@ -298,7 +399,7 @@ public class Matrix implements Cloneable, Serializable {
         double f = 0;
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                f = Maths.hypot(f,A[i][j]);
+                f = Maths.hypot(f, A[i][j]);
             }
         }
         return f;
@@ -331,7 +432,7 @@ public class Matrix implements Cloneable, Serializable {
         checkMatrixDimensions(B);
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                A[i][j] = A[i][j] + B.A[i][j];
+                A[i][j] += B.A[i][j];
             }
         }
         return this;
@@ -353,7 +454,7 @@ public class Matrix implements Cloneable, Serializable {
         checkMatrixDimensions(B);
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                A[i][j] = A[i][j] - B.A[i][j];
+                A[i][j] -= B.A[i][j];
             }
         }
         return this;
@@ -375,7 +476,7 @@ public class Matrix implements Cloneable, Serializable {
         checkMatrixDimensions(B);
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                A[i][j] = A[i][j] * B.A[i][j];
+                A[i][j] *= B.A[i][j];
             }
         }
         return this;
@@ -397,7 +498,7 @@ public class Matrix implements Cloneable, Serializable {
         checkMatrixDimensions(B);
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                A[i][j] = A[i][j] / B.A[i][j];
+                A[i][j] /= B.A[i][j];
             }
         }
         return this;
@@ -415,7 +516,7 @@ public class Matrix implements Cloneable, Serializable {
         return X;
     }
 
-    public Matrix arrayLeftDivideEquals (Matrix B) {
+    public Matrix arrayLeftDivideEquals(Matrix B) {
         checkMatrixDimensions(B);
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
@@ -454,7 +555,7 @@ public class Matrix implements Cloneable, Serializable {
         double[] Bcolj = new double[n];
         for (int j = 0; j < B.n; ++j) {
             for (int k = 0; k < n; ++k) {
-                Bcolj[k] = B.A[k][j];
+                Bcolj[k] =  B.A[k][j];
             }
             for (int i = 0; i < m; ++i) {
                 double[] Arowi = A[i];
@@ -484,36 +585,66 @@ public class Matrix implements Cloneable, Serializable {
         return new SingularValueDecomposition(this);
     }
 
+    /**
+     * Вычисление собственных чисел и векторов матрицы.
+     *
+     * @return собственные числа и вектора
+     */
     public EigenvalueDecomposition eig() {
         return new EigenvalueDecomposition(this);
     }
 
     public Matrix solve(Matrix B) {
-        return (m == n ? (new LUDecomposition(this)).solve(B) :
-                         (new QRDecomposition(this)).solve(B));
+        return (m == n ? (new LUDecomposition(this)).solve(B)
+                       : (new QRDecomposition(this)).solve(B));
     }
 
     public Matrix solveTranspose(Matrix B) {
         return transpose().solve(B.transpose());
     }
 
+    /**
+     * Вычисление обратной матрицы.
+     *
+     * @return обратная матрица
+     */
     public Matrix inverse() {
         return solve(identity(m, m));
     }
 
-   public double det() {
+    /**
+     * Вычисление определителя матрицы.
+     *
+     * @return определитель
+     */
+    public double det() {
         return new LUDecomposition(this).det();
     }
 
+    /**
+     * Вычисление ранга матрицы.
+     *
+     * @return ранг
+     */
     public int rank() {
         return new SingularValueDecomposition(this).rank();
     }
 
-    public double cond () {
+    /**
+     * Вычисление числа обусловленности матрицы.
+     *
+     * @return число обусловленности
+     */
+    public double cond() {
         return new SingularValueDecomposition(this).cond();
     }
 
-    public double trace () {
+    /**
+     * Вычисление следа матрицы.
+     *
+     * @return след матрицы
+     */
+    public double trace() {
         double t = 0;
         for (int i = 0; i < Math.min(m, n); ++i) {
             t += A[i][i];
@@ -521,7 +652,14 @@ public class Matrix implements Cloneable, Serializable {
         return t;
     }
 
-    public static Matrix random (int m, int n) {
+    /**
+     * Создание матрицы, заполненой случайными значениями.
+     *
+     * @param m число строк
+     * @param n число столбцов
+     * @return матрица
+     */
+    public static Matrix random(int m, int n) {
         Matrix A = new Matrix(m, n);
         double[][] X = A.getArray();
         for (int i = 0; i < m; ++i) {
@@ -532,7 +670,14 @@ public class Matrix implements Cloneable, Serializable {
         return A;
     }
 
-    public static Matrix identity (int m, int n) {
+    /**
+     * Создание единичной матрицы.
+     *
+     * @param m число строк
+     * @param n число столбцов
+     * @return единичная матрица
+     */
+    public static Matrix identity(int m, int n) {
         Matrix A = new Matrix(m, n);
         double[][] X = A.getArray();
         for (int i = 0; i < m; ++i) {
@@ -543,11 +688,24 @@ public class Matrix implements Cloneable, Serializable {
         return A;
     }
 
-    public void print (int w, int d) {
-        print(new PrintWriter(System.out,true), w, d);
+    /**
+     * Печатает матрицу в консоль.
+     *
+     * @param w ширина колонки
+     * @param d число цифр после запятой
+     */
+    public void print(int w, int d) {
+        print(new PrintWriter(System.out, true), w, d);
     }
 
-    public void print (PrintWriter output, int w, int d) {
+    /**
+     * Печатает матрицу в поток.
+     *
+     * @param output выходной поток
+     * @param w ширина колонки
+     * @param d число цифр после запятой
+     */
+    public void print(PrintWriter output, int w, int d) {
         DecimalFormat format = new DecimalFormat();
         format.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
         format.setMinimumIntegerDigits(1);
@@ -557,11 +715,24 @@ public class Matrix implements Cloneable, Serializable {
         print(output, format, w + 2);
     }
 
-    public void print (NumberFormat format, int width) {
-        print(new PrintWriter(System.out,true), format, width);
+    /**
+     * Печать матрицы в консоль.
+     *
+     * @param format объект, форматирующий выводимые числа
+     * @param width ширина колонки
+     */
+    public void print(NumberFormat format, int width) {
+        print(new PrintWriter(System.out, true), format, width);
     }
 
-    public void print (PrintWriter output, NumberFormat format, int width) {
+    /**
+     * Печатает матрицу в поток.
+     *
+     * @param output выходной поток
+     * @param format объект, форматирующий выводимые числа
+     * @param width ширина колонки
+     */
+    public void print(PrintWriter output, NumberFormat format, int width) {
         output.println();
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
@@ -574,17 +745,24 @@ public class Matrix implements Cloneable, Serializable {
             }
             output.println();
         }
-        output.println();   // end with blank line.
+        output.println();
     }
 
-    public static Matrix read (BufferedReader input) throws java.io.IOException {
-        StreamTokenizer tokenizer= new StreamTokenizer(input);
+    /**
+     * Читает матрицу из потока.
+     *
+     * @param input входной поток
+     * @return матрица
+     * @throws IOException ошибка при чтении
+     */
+    public static Matrix read(BufferedReader input) throws IOException {
+        StreamTokenizer tokenizer = new StreamTokenizer(input);
 
         tokenizer.resetSyntax();
         tokenizer.wordChars(0, 255);
         tokenizer.whitespaceChars(0, ' ');
         tokenizer.eolIsSignificant(true);
-        java.util.Vector v = new java.util.Vector();
+        Vector<Double> vD = new Vector<Double>();
 
         while (tokenizer.nextToken() == StreamTokenizer.TT_EOL);
         if (tokenizer.ttype == StreamTokenizer.TT_EOF) {
@@ -592,15 +770,15 @@ public class Matrix implements Cloneable, Serializable {
         }
 
         do {
-            v.addElement(Double.valueOf(tokenizer.sval));
+            vD.addElement(Double.valueOf(tokenizer.sval));
         } while (tokenizer.nextToken() == StreamTokenizer.TT_WORD);
 
-        int n = v.size();
+        int n = vD.size();
         double row[] = new double[n];
-        for (int j=0; j<n; ++j) {
-            row[j]=((Double)v.elementAt(j)).doubleValue();
+        for (int j = 0; j < n; ++j) {
+            row[j] = vD.elementAt(j).doubleValue();
         }
-        v.removeAllElements();
+        Vector<double[]> v = new Vector<double[]>();
         v.addElement(row);
         while (tokenizer.nextToken() == StreamTokenizer.TT_WORD) {
             v.addElement(row = new double[n]);
@@ -621,10 +799,14 @@ public class Matrix implements Cloneable, Serializable {
         return new Matrix(A);
     }
 
-    private void checkMatrixDimensions (Matrix B) {
+    /**
+     * Проверяет соответствие размерности заданной матрицы и текущей матрицы
+     *
+     * @param B проверяемая матрица
+     */
+    private void checkMatrixDimensions(Matrix B) {
         if (B.m != m || B.n != n) {
             throw new IllegalArgumentException("Matrix dimensions must agree.");
         }
     }
-
 }
