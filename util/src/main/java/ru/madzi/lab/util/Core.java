@@ -6,9 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Window;
-
 import javax.swing.ImageIcon;
-
 import ru.madzi.lab.util.graphics.ScreenManager;
 
 /**
@@ -37,7 +35,7 @@ public abstract class Core {
 
     protected boolean isFullscreen;
 
-    protected ScreenManager screen;
+    protected ScreenManager screenManager;
 
     public void stop() {
         isRunning = false;
@@ -49,7 +47,7 @@ public abstract class Core {
             loop();
         } finally {
             if (isFullscreen) {
-                screen.resotreScreen();
+                screenManager.resotreScreen();
             }
             lazilyExit();
         }
@@ -69,9 +67,9 @@ public abstract class Core {
     }
 
     public void init() {
-        screen = new ScreenManager();
-        DisplayMode displayMode = screen.findFirstCompatibleMode(POSSIBLE_MODES);
-        Window window = screen.setFullscreen(displayMode, isFullscreen);
+        screenManager = new ScreenManager();
+        DisplayMode displayMode = screenManager.findFirstCompatibleMode(POSSIBLE_MODES);
+        Window window = screenManager.setFullscreen(displayMode, isFullscreen);
         window.setFont(new Font("Dialog", Font.PLAIN, FONT_SIZE));
         window.setBackground(Color.BLUE);
         window.setForeground(Color.WHITE);
@@ -89,10 +87,10 @@ public abstract class Core {
             long elapsedTime = System.currentTimeMillis() - currTime;
             currTime += elapsedTime;
             update(elapsedTime);
-            Graphics2D g = screen.getGraphics();
+            Graphics2D g = screenManager.getGraphics();
             draw(g);
             g.dispose();
-            screen.update();
+            screenManager.update();
         }
     }
 

@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Graphics2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import ru.madzi.lab.game.stages.GameStage;
 import ru.madzi.lab.game.stages.IntroStage;
 import ru.madzi.lab.game.stages.MenuStage;
@@ -39,15 +38,16 @@ public class App extends Core {
         new App().run();
     }
 
+    @Override
     public void init() {
         _LOG.setLevel(Level.INFO);
         _LOG.info("Init application");
         super.init();
 
         _LOG.info("Init input manager");
-        inputManager = new InputManager((Component) screen.getWindow());
+        inputManager = new InputManager((Component) screenManager.getWindow());
         _LOG.info("Init resource manager");
-        resourceManager = new ResourceManager(screen.getWindow().getGraphicsConfiguration());
+        resourceManager = new ResourceManager(screenManager.getWindow().getGraphicsConfiguration());
         _LOG.info("Init stage manager");
         stageManager = new StageManager(inputManager, resourceManager.loadImage("images/8backscreen.bmp"));
 
@@ -97,6 +97,7 @@ public class App extends Core {
      *
      * @param g холст
      */
+    @Override
     public void draw(Graphics2D g) {
         stageManager.draw(g);
     }

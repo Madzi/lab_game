@@ -9,7 +9,6 @@ import java.awt.Window;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
-
 import javax.swing.JFrame;
 
 /**
@@ -56,13 +55,13 @@ public class ScreenManager {
     }
 
     /**
-     * Сравнивает два видеорежима.
-     * Видеорежимы считаются совпавшими если у них одинаковая ширина и высота,
+     * Сравнивает два видео-режима.
+     * Видео-режимы считаются совпавшими если у них одинаковая ширина и высота,
      * а также одинаковая или неопределённая частота обновления и количество бит на пиксель.
      * 
-     * @param mode1 первый видеорежим
-     * @param mode2 второй видеорежим
-     * @return <b>true</b> если видеорежимы совпадают
+     * @param mode1 первый видео-режим
+     * @param mode2 второй видео-режим
+     * @return <b>true</b> если видео-режимы совпадают
      */
     public boolean displayModesMatch(DisplayMode mode1, DisplayMode mode2) {
         boolean match = mode1.getWidth() == mode2.getWidth() 
@@ -79,8 +78,8 @@ public class ScreenManager {
     /**
      * Возвращает активное окно программы.
      * 
-     * @param displayMode видеорежим
-     * @param fullscreen признак полноэкранного режима
+     * @param displayMode видео-режим
+     * @param fullscreen признак полно-экранного режима
      * @return окно
      */
     public JFrame setFullscreen(DisplayMode displayMode, boolean fullscreen) {
@@ -102,6 +101,7 @@ public class ScreenManager {
         try {
             EventQueue.invokeAndWait(new Runnable() {
 
+                @Override
                 public void run() {
                     frame.createBufferStrategy(2);
                 }
@@ -115,7 +115,7 @@ public class ScreenManager {
     }
 
     /**
-     * Вовзращает холст для рисования.
+     * Возвращает холст для рисования.
      * 
      * @return холст
      */
@@ -173,7 +173,7 @@ public class ScreenManager {
     }
 
     /**
-     * Создаёт изображение, совместимое с текущим видеорежимом.
+     * Создаёт изображение, совместимое с текущим видео-режимом.
      * 
      * @param w - ширина
      * @param h - высота
