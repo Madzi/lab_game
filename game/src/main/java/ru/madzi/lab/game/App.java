@@ -2,8 +2,10 @@ package ru.madzi.lab.game;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import ru.madzi.lab.game.stages.GameStage;
 import ru.madzi.lab.game.stages.IntroStage;
 import ru.madzi.lab.game.stages.MenuStage;
@@ -49,7 +51,8 @@ public class App extends Core {
         _LOG.info("Init resource manager");
         resourceManager = new ResourceManager(screenManager.getWindow().getGraphicsConfiguration());
         _LOG.info("Init stage manager");
-        stageManager = new StageManager(inputManager, resourceManager.loadImage("images/8backscreen.bmp"));
+        Image image = new ImageIcon("/images/6backtest.bmp").getImage();
+        stageManager = new StageManager(inputManager, image);
 
         _LOG.info("Intro stage init...");
         stageManager.addStage(new IntroStage());

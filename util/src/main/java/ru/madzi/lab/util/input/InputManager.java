@@ -37,25 +37,25 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
 
     private Point centerLocation;
 
-    private Component comp;
+    private Component component;
 
     private Robot robot;
 
     private boolean isRecentering;
 
     public InputManager(Component component) {
-        this.comp = comp;
+        this.component = component;
         mouseLocation = new Point();
         centerLocation = new Point();
-        comp.addKeyListener(this);
-        comp.addMouseListener(this);
-        comp.addMouseMotionListener(this);
-        comp.addMouseWheelListener(this);
-        comp.setFocusTraversalKeysEnabled(false);
+        component.addKeyListener(this);
+        component.addMouseListener(this);
+        component.addMouseMotionListener(this);
+        component.addMouseWheelListener(this);
+        component.setFocusTraversalKeysEnabled(false);
     }
 
     public void setCursor(Cursor cursor) {
-        comp.setCursor(cursor);
+        component.setCursor(cursor);
     }
 
     public void setRelativeMouseMode(boolean mode) {
@@ -144,10 +144,10 @@ public class InputManager implements KeyListener, MouseListener, MouseMotionList
     }
 
     private synchronized void recenterMouse() {
-        if (robot != null && comp.isShowing()) {
-            centerLocation.x = comp.getWidth() / 2;
-            centerLocation.y = comp.getHeight() / 2;
-            SwingUtilities.convertPointToScreen(centerLocation, comp);
+        if (robot != null && component.isShowing()) {
+            centerLocation.x = component.getWidth() / 2;
+            centerLocation.y = component.getHeight() / 2;
+            SwingUtilities.convertPointToScreen(centerLocation, component);
             isRecentering = true;
             robot.mouseMove(centerLocation.x, centerLocation.y);
         }

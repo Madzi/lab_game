@@ -69,6 +69,9 @@ public abstract class Core {
     public void init() {
         screenManager = new ScreenManager();
         DisplayMode displayMode = screenManager.findFirstCompatibleMode(POSSIBLE_MODES);
+        if (!isFullscreen && displayMode == null) {
+            displayMode = POSSIBLE_MODES[0];
+        }
         Window window = screenManager.setFullscreen(displayMode, isFullscreen);
         window.setFont(new Font("Dialog", Font.PLAIN, FONT_SIZE));
         window.setBackground(Color.BLUE);
