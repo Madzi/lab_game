@@ -2,7 +2,7 @@ package ru.madzi.lab.game.stages;
 
 import java.awt.Graphics2D;
 import ru.madzi.lab.util.input.InputManager;
-import ru.madzi.lab.util.stages.ResourceManager;
+import ru.madzi.lab.util.stages.AbstractResourceManager;
 import ru.madzi.lab.util.stages.Stage;
 
 public class SetupStage implements Stage {
@@ -24,7 +24,7 @@ public class SetupStage implements Stage {
     /**
      * {@inheritDoc}
      */
-    public void loadResources(ResourceManager resourceManager) {
+    public void loadResources(AbstractResourceManager resourceManager) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

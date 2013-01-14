@@ -1,7 +1,6 @@
 package ru.madzi.lab.util.stages;
 
 import java.awt.Graphics2D;
-
 import ru.madzi.lab.util.input.InputManager;
 
 /**
@@ -28,7 +27,7 @@ public interface Stage {
      * 
      * @param resourceManager менеджер ресурсов
      */
-    public void loadResources(ResourceManager resourceManager);
+    public void loadResources(AbstractResourceManager resourceManager);
 
     /**
      * Запускает сцену для отображения. Инициализирующие действия.

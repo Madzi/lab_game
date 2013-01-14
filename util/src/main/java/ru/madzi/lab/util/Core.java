@@ -17,6 +17,10 @@ public abstract class Core {
     protected static final int FONT_SIZE = 24;
 
     private static final DisplayMode[] POSSIBLE_MODES = {
+        new DisplayMode(1280, 1024, 24, 0),
+        new DisplayMode(1280, 1024, 32, 0),
+        new DisplayMode(1280, 1024, 16, 0),
+        new DisplayMode(1280, 1024,8, 0),
         new DisplayMode(1024, 768, 24, 0),
         new DisplayMode(1024, 768, 32, 0),
         new DisplayMode(1024, 768, 16, 0),
@@ -33,7 +37,9 @@ public abstract class Core {
 
     private boolean isRunning;
 
-    protected boolean isFullscreen;
+    protected boolean isFullscreen = false;
+
+    protected DisplayMode displayMode = null;
 
     protected ScreenManager screenManager;
 
@@ -68,7 +74,9 @@ public abstract class Core {
 
     public void init() {
         screenManager = new ScreenManager();
-        DisplayMode displayMode = screenManager.findFirstCompatibleMode(POSSIBLE_MODES);
+        if (displayMode == null) {
+            displayMode = screenManager.findFirstCompatibleMode(POSSIBLE_MODES);
+        }
         if (!isFullscreen && displayMode == null) {
             displayMode = POSSIBLE_MODES[0];
         }
@@ -91,8 +99,10 @@ public abstract class Core {
             currTime += elapsedTime;
             update(elapsedTime);
             Graphics2D g = screenManager.getGraphics();
-            draw(g);
-            g.dispose();
+            if (g != null) {
+                draw(g);
+                g.dispose();
+            }
             screenManager.update();
         }
     }

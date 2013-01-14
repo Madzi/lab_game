@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import ru.madzi.lab.util.input.InputManager;
 
 /**
@@ -44,7 +43,7 @@ public class StageManager {
      * @param stage сцена
      */
     public void addStage(Stage stage) {
-        if (stage != null && stage.getName() != EXIT_GAME) {
+        if (stage != null && !EXIT_GAME.equals(stage.getName())) {
             stages.put(stage.getName(), stage);
         }
     }
@@ -63,7 +62,7 @@ public class StageManager {
      * 
      * @param resourceManager менеджер ресурсов
      */
-    public void loadAllResources(ResourceManager resourceManager) {
+    public void loadAllResources(AbstractResourceManager resourceManager) {
         for (Stage stage : getStages()) {
             stage.loadResources(resourceManager);
         }
@@ -88,7 +87,7 @@ public class StageManager {
             currentStage.stop();
         }
         inputManager.clearAllMaps();
-        if (name == EXIT_GAME) {
+        if (EXIT_GAME.equals(name)) {
             done = true;
         } else {
             currentStage = stages.get(name);
@@ -128,9 +127,8 @@ public class StageManager {
             currentStage.draw(g);
         } else {
             if (defaultImage != null) {
-                
+                g.drawImage(defaultImage, 0, 0, null);
             }
-            g.drawImage(defaultImage, 0, 0, null);
         }
     }
 

@@ -98,6 +98,9 @@ public class ScreenManager {
             }
         }
         frame.setSize(displayMode.getWidth(), displayMode.getHeight());
+        if (!fullscreen) {
+          frame.setVisible(true);
+        }
         try {
             EventQueue.invokeAndWait(new Runnable() {
 
@@ -120,7 +123,13 @@ public class ScreenManager {
      * @return холст
      */
     public Graphics2D getGraphics() {
-        return window != null ? (Graphics2D) window.getBufferStrategy().getDrawGraphics() : null;
+        if (window != null) {
+            if (window.getBufferStrategy() != null) {
+                return (Graphics2D) window.getBufferStrategy().getDrawGraphics();
+            }
+            return (Graphics2D) window.getGraphics();
+        }
+        return null;
     }
 
     /**
@@ -129,7 +138,7 @@ public class ScreenManager {
     public void update() {
         if (window != null) {
             BufferStrategy strategy = window.getBufferStrategy();
-            if (!strategy.contentsLost()) {
+            if (strategy != null && !strategy.contentsLost()) {
                 strategy.show();
             }
         }
