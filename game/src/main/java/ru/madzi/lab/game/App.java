@@ -3,7 +3,6 @@ package ru.madzi.lab.game;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import ru.madzi.lab.game.stages.GameStage;
 import ru.madzi.lab.game.stages.IntroStage;
 import ru.madzi.lab.game.stages.MenuStage;
