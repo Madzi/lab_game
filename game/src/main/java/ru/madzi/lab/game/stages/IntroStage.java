@@ -21,6 +21,8 @@ public class IntroStage implements Stage {
 
     private Action exitAction;
 
+    private double fps;
+
     /**
      * {@inheritDoc}
      */
@@ -42,7 +44,8 @@ public class IntroStage implements Stage {
      */
     @Override
     public void loadResources(AbstractResourceManager resourceManager) {
-        background = new ImageIcon("/images/6backtest.bmp").getImage();
+        background = resourceManager.loadImage("/images/6backtest.png");
+//        background = new ImageIcon("/images/6backtest.png").getImage();
     }
 
     /**
@@ -72,6 +75,7 @@ public class IntroStage implements Stage {
         if (exitAction.isPressed() || showTime > INTRO_TIME) {
             done = true;
         }
+        fps = elapsedTime == 0 ? 1000 : 1000 / elapsedTime;
     }
 
     /**
@@ -82,6 +86,8 @@ public class IntroStage implements Stage {
         if (background != null) {
             g.drawImage(background, null, null);
         }
+        g.drawString("INTRO", 10, 60);
+        g.drawString(Double.toString(fps), 10, 160);
     }
 
 }

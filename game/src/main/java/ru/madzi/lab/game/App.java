@@ -26,6 +26,8 @@ public class App extends Core {
 
     private ResourceManager resourceManager;
 
+    private IntroStage intro;
+
     /**
      * Главная функция.
      *
@@ -44,32 +46,33 @@ public class App extends Core {
         displayMode = new DisplayMode(800, 600, DisplayMode.BIT_DEPTH_MULTI, DisplayMode.REFRESH_RATE_UNKNOWN);
         super.init();
 
+        initManagers();
+
+        initStages();
+
+        stageManager.setStage(intro.getName());
+    }
+
+    private void initManagers() {
         _LOG.info("Init input manager");
         inputManager = new InputManager((Component) screenManager.getWindow());
         _LOG.info("Init resource manager");
         resourceManager = new ResourceManager(screenManager.getWindow().getGraphicsConfiguration());
         _LOG.info("Init stage manager");
-        stageManager = new StageManager(inputManager, resourceManager.loadImage("/images/6backtest.bmp"));
+        stageManager = new StageManager(inputManager, resourceManager.loadImage("/images/6backtest.png"));
+    }
 
-        _LOG.info("Intro stage init...");
-        stageManager.addStage(new IntroStage());
-
-        _LOG.info("Menu stage init...");
+    private void initStages() {
+        _LOG.info("Init stages...");
+        intro = new IntroStage();
+        stageManager.addStage(intro);
         stageManager.addStage(new MenuStage());
-
-        _LOG.info("Setup stage init...");
         stageManager.addStage(new SetupStage());
-
-        _LOG.info("Game stage init...");
         stageManager.addStage(new GameStage());
-
-        _LOG.info("Records stage init...");
         stageManager.addStage(new RecordsStage());
-
-        _LOG.info("Statistics stage init...");
         stageManager.addStage(new StatisticsStage());
-
-        stageManager.setStage("_intro");
+        stageManager.loadAllResources(resourceManager);
+        stageManager.setStage(intro.getName());
     }
 
     @Override

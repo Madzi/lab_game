@@ -1,15 +1,21 @@
 package ru.madzi.lab.game.stages;
 
 import java.awt.Graphics2D;
+import java.util.logging.Logger;
 import ru.madzi.lab.util.input.InputManager;
 import ru.madzi.lab.util.stages.AbstractResourceManager;
 import ru.madzi.lab.util.stages.Stage;
 
 public class GameStage implements Stage {
 
+    private static final Logger _LOG = Logger.getLogger(GameStage.class.getName());
+
+    private boolean isResLoaded = false;
+
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getName() {
         return "_game";
     }
@@ -17,43 +23,53 @@ public class GameStage implements Stage {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String checkForStageChange() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void loadResources(AbstractResourceManager resourceManager) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (!isResLoaded) {
+            _LOG.info("Loading resources...");
+            //TODO: Загрузка ресурсов
+            isResLoaded = true;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void start(InputManager inputManager) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        _LOG.info("Start scene...");
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stop() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        _LOG.info("Stop scene...");
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(long elapsedTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        _LOG.info("Update scene...");
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void draw(Graphics2D g) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        _LOG.info("Draw scene...");
     }
 
 }

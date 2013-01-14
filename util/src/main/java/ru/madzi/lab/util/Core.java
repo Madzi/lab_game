@@ -61,12 +61,15 @@ public abstract class Core {
 
     public void lazilyExit() {
         Thread thread = new Thread() {
+
+            @Override
             public void run() {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {}
                 System.exit(0);
             }
+
         };
         thread.setDaemon(true);
         thread.start();
